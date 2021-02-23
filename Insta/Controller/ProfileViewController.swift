@@ -141,6 +141,9 @@ extension ProfileViewController {
 extension ProfileViewController: ProfileHeaderDelegate {
     
     func header(_ profileHeader: ProfileHeader, didTapActionButtonFor user: User) {
+        guard let tab = self.tabBarController as? MainTabViewController else { return }
+        guard let currentUser = tab.user else { return }
+        
         if user.isCurrentUser {
             print("页面为当前登陆用户主页")
         } else if user.isFollowed {
@@ -154,6 +157,8 @@ extension ProfileViewController: ProfileHeaderDelegate {
             UserService.follow(uid: user.uid) { (error) in
                 self.user.isFollowed = true
                 self.collectionView.reloadData()
+                
+                NotificationService.uploadNotification(toUid: user.uid, fromUser: currentUser, type: .follow, post: nil)
             }
         }
     }

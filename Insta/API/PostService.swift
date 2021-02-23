@@ -52,6 +52,17 @@ struct PostService {
         }
     }
     
+    ///Fetch Single Post
+    static func fetchSinglePost(withPostId postId: String, completion: @escaping(Post) -> Void) {
+        COLLECTION_POSTS.document(postId).getDocument { (snapshot, _) in
+            guard let doc = snapshot else { return }
+            guard let data = doc.data() else { return }
+            
+            let post = Post(postId: doc.documentID, dictionary: data)
+            completion(post)
+        }
+    }
+    
     ///Like The Post
     static func likePost(post: Post, completion: @escaping(FirebaseCompletion)) {
         guard let uid = Auth.auth().currentUser?.uid else { return }

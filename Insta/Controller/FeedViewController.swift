@@ -142,6 +142,9 @@ extension FeedViewController: FeedCellDelegate {
     
     func cell(_ cell: FeedCell, didLike post: Post) {
         cell.viewModel?.post.didLike.toggle()
+        let tab = self.tabBarController as! MainTabViewController
+        guard let user = tab.user else { return }
+        
         if post.didLike {
             print("unlike")
             PostService.unLikePost(post: post) { (_) in
@@ -153,7 +156,7 @@ extension FeedViewController: FeedCellDelegate {
                 print("您喜欢了该Post，Post like 数加一")
                 cell.viewModel?.post.likes = post.likes + 1
                 
-                NotificationService.uploadNotification(toUid: post.ownerUid, type: .like, post: post)
+                NotificationService.uploadNotification(toUid: post.ownerUid, fromUser: user, type: .like, post: post)
             }
         }
     }

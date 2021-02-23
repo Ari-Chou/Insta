@@ -35,3 +35,4 @@ struct User {
         self.stats = UserStats(followers: 0, following: 0, posts: 0)
     }
 }
+

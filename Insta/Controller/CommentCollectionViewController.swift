@@ -117,8 +117,10 @@ extension CommentCollectionViewController: CommentInputAccesoryViewDelegate {
                 print("发表评论失败", error.localizedDescription)
             }
             print("发表评论成功并清理输入框")
-            iputView.clearCommentTextView()
             self.showLoader(false)
+            iputView.clearCommentTextView()
+            
+            NotificationService.uploadNotification(toUid: self.post.ownerUid, fromUser: user, type: .comment, post: self.post)
         }
     }
 }
